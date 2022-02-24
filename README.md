@@ -1,5 +1,9 @@
 # Recurrence Rules
 
+![Tests](https://github.com/brzuchal/recurrence-rules/actions/workflows/php.yml/badge.svg)
+
+---
+
 A recurrence processor for PHP
 
 This library parses recurrence strings as defined in RFC 5545 and RFC 2445 and iterates the instances.
