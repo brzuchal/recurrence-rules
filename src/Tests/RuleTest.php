@@ -4,24 +4,22 @@ namespace Brzuchal\RecurrenceRule\Tests;
 
 use Brzuchal\RecurrenceRule\Freq;
 use Brzuchal\RecurrenceRule\Rule;
-use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use Brzuchal\RecurrenceRule\WeekDay;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 class RuleTest extends TestCase
 {
     /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification
      * @dataProvider dataTestToString
      */
     public function testToString(array $expected, Rule $rule): void
     {
         \sort($expected);
-        $test = \explode(';', ($rule)->toString());
+        $test = \explode(';', $rule->toString());
         \sort($test);
         $this->assertEquals($expected, $test);
     }
@@ -54,9 +52,15 @@ class RuleTest extends TestCase
             ],
             'Very long and complex' => [
                 [
-                    'FREQ=HOURLY', 'COUNT=1', 'INTERVAL=2', 'BYSECOND=1,2,3,4',
-                    'BYMINUTE=5,10,15,20,25,30,35', 'BYHOUR=6,12,18,0',
-                    'BYSETPOS=1,2,4,8', 'WKST=TU', 'UNTIL=20241231T235959',
+                    'FREQ=HOURLY',
+                    'COUNT=1',
+                    'INTERVAL=2',
+                    'BYSECOND=1,2,3,4',
+                    'BYMINUTE=5,10,15,20,25,30,35',
+                    'BYHOUR=6,12,18,0',
+                    'BYSETPOS=1,2,4,8',
+                    'WKST=TU',
+                    'UNTIL=20241231T235959',
                 ],
                 new Rule(
                     freq: Freq::Hourly,

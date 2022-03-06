@@ -6,6 +6,7 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByWeekNoRule implements PartialRule
 {
     /**
@@ -13,7 +14,8 @@ final class ByWeekNoRule implements PartialRule
      */
     public function __construct(
         public readonly array $wnList,
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {

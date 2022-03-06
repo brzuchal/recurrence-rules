@@ -6,6 +6,7 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByDayRule implements PartialRule
 {
     /**
@@ -13,7 +14,8 @@ final class ByDayRule implements PartialRule
      */
     public function __construct(
         public readonly array $weekDayNumList
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {

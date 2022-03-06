@@ -9,6 +9,7 @@ use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class Rule
 {
     /**
@@ -80,7 +81,7 @@ final class Rule
      */
     public function isFinite(): bool
     {
-        return $this->count || $this->until;
+        return $this->count !== null || $this->until !== null;
     }
 
     /**
@@ -88,7 +89,7 @@ final class Rule
      */
     public function isInfinite(): bool
     {
-        return !$this->count && !$this->until;
+        return $this->count === null && $this->until === null;
     }
 
     /**

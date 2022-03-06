@@ -23,6 +23,7 @@ use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 /**
  * Source of definition {@see https://www.rfc-editor.org/rfc/rfc5545.html#section-3.3.10}
  * Format Definition: This value type is defined by the following
@@ -96,7 +97,7 @@ final class RfcParser
         $parts = [];
         while ($offset < $length) {
             $partialRuleDelimiter = \stripos($rule, ';', $offset);
-            $partialRule = \substr($rule, $offset, $partialRuleDelimiter ? $partialRuleDelimiter - $offset: null);
+            $partialRule = \substr($rule, $offset, $partialRuleDelimiter ? $partialRuleDelimiter - $offset : null);
             $parts[] = match ($partialRule[0]) {
                 'F' => self::tryParseFreq($partialRule),
                 'U' => self::tryParseUntil($partialRule),
@@ -185,13 +186,13 @@ final class RfcParser
     private static function tryParseByRules(string $partialRule): PartialRule
     {
         $assignOffset = \strpos($partialRule, '=');
-        if ($assignOffset == false) {
+        if ($assignOffset === false) {
             throw RfcParserSyntaxError::create($partialRule, 'expected value assignment was not found');
         }
 
         $byName = \substr($partialRule, 0, $assignOffset);
-
         $value = \substr($partialRule, ++$assignOffset);
+
         return match ($byName) {
             'BYSECOND' => self::tryParseBySecond($value),
             'BYMINUTE' => self::tryParseByMinute($value),
@@ -360,6 +361,8 @@ final class RfcParser
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType,LessSpecificReturnStatement
+     * @psalm-return list<positive-int>
      * @throws RfcParserSyntaxError
      */
     private static function tryParseLimitedNumberList(string $ruleName, string $value, int $max): array

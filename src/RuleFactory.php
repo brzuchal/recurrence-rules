@@ -2,6 +2,7 @@
 
 namespace Brzuchal\RecurrenceRule;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class RuleFactory
 {
     /**

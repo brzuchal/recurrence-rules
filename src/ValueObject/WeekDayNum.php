@@ -4,9 +4,10 @@ namespace Brzuchal\RecurrenceRule\ValueObject;
 
 use Brzuchal\RecurrenceRule\WeekDay;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class WeekDayNum
 {
-    public readonly int|null $ordWeek;
+    public readonly int | null $ordWeek;
 
     public function __construct(
         public readonly WeekDay $weekDay,

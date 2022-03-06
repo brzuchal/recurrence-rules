@@ -1,8 +1,14 @@
 # Recurrence Rules
 
-![Tests](https://github.com/brzuchal/recurrence-rules/actions/workflows/php.yml/badge.svg)
+![Tests](https://github.com/brzuchal/recurrence-rules/actions/workflows/continous-integration.yml/badge.svg)
 
 ---
+
+## A message to Russian 🇷🇺 people
+
+If you currently live in Russia, please read [this message](./ToRussianPeople.md).
+
+## Purpose
 
 A recurrence processor for PHP
 
@@ -12,6 +18,8 @@ In addition, it can be used to build valid recurrence strings in a convenient ma
 The Rule class is implemented in immutable manner, use RuleBuilder for convenient approcha to build Rule objects.
 
 Please note that the interface of the classes in this library is not finalized yet and subject to change.
+
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 ## Install
 

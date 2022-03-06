@@ -9,6 +9,7 @@ use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class RuleBuilder
 {
     private Freq|null $freq = null;

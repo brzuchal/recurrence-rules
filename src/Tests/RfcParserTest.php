@@ -3,33 +3,35 @@
 namespace Brzuchal\RecurrenceRule\Tests;
 
 use Brzuchal\RecurrenceRule\Freq;
-use Brzuchal\RecurrenceRule\PartialRule\ByMonthRule;
-use Brzuchal\RecurrenceRule\PartialRule\BySetPosRule;
-use Brzuchal\RecurrenceRule\PartialRule\ByWeekNoRule;
-use Brzuchal\RecurrenceRule\PartialRule\WkstRule;
-use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
 use Brzuchal\RecurrenceRule\PartialRule\ByDayRule;
 use Brzuchal\RecurrenceRule\PartialRule\ByHourRule;
 use Brzuchal\RecurrenceRule\PartialRule\ByMinuteRule;
 use Brzuchal\RecurrenceRule\PartialRule\ByMonthDayRule;
+use Brzuchal\RecurrenceRule\PartialRule\ByMonthRule;
 use Brzuchal\RecurrenceRule\PartialRule\BySecondRule;
+use Brzuchal\RecurrenceRule\PartialRule\BySetPosRule;
+use Brzuchal\RecurrenceRule\PartialRule\ByWeekNoRule;
 use Brzuchal\RecurrenceRule\PartialRule\ByYearDayRule;
 use Brzuchal\RecurrenceRule\PartialRule\CountRule;
 use Brzuchal\RecurrenceRule\PartialRule\FreqRule;
 use Brzuchal\RecurrenceRule\PartialRule\IntervalRule;
 use Brzuchal\RecurrenceRule\PartialRule\UntilRule;
+use Brzuchal\RecurrenceRule\PartialRule\WkstRule;
 use Brzuchal\RecurrenceRule\RfcParser;
+use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
 use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
-use Brzuchal\RecurrenceRule\WeekDay;
 use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
+use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
+use Brzuchal\RecurrenceRule\WeekDay;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 class RfcParserTest extends TestCase
 {
     /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification
      * @dataProvider dataValidPartialRules
      */
     public function testValidRule(string $rule, array $expected): void
@@ -57,31 +59,61 @@ class RfcParserTest extends TestCase
             'BySeconds 1, 31' => ['BYSECOND=1,31', [new BySecondRule([1, 31])]],
             'ByMinute 1, 31' => ['BYMINUTE=1,31', [new ByMinuteRule([1, 31])]],
             'ByHour 1, 23' => ['BYHOUR=1,23', [new ByHourRule([1, 23])]],
-            'ByDay MO,TU' => ['BYDAY=MO,TU', [new ByDayRule([
-                new WeekDayNum(WeekDay::Monday),
-                new WeekDayNum(WeekDay::Tuesday),
-            ])]],
-            'ByDay 2MO,+3TU,-4WE' => ['BYDAY=2MO,+3TU,-4WE', [new ByDayRule([
-                new WeekDayNum(WeekDay::Monday, 2),
-                new WeekDayNum(WeekDay::Tuesday, 3, false),
-                new WeekDayNum(WeekDay::Wednesday, 4, true),
-            ])]],
-            'ByMonthDay 1,2' => ['BYMONTHDAY=1,2', [new ByMonthDayRule([
-                new MonthDayNum(1),
-                new MonthDayNum(2),
-            ])]],
-            'ByMonthDay +1,-2' => ['BYMONTHDAY=+1,-2', [new ByMonthDayRule([
-                new MonthDayNum(1, false),
-                new MonthDayNum(2, true),
-            ])]],
-            'ByYearDay 128,256' => ['BYYEARDAY=128,256', [new ByYearDayRule([
-                new YearDayNum(128),
-                new YearDayNum(256),
-            ])]],
-            'ByYearDay +16,-32' => ['BYYEARDAY=+16,-32', [new ByYearDayRule([
-                new YearDayNum(16, false),
-                new YearDayNum(32, true),
-            ])]],
+            'ByDay MO,TU' => [
+                'BYDAY=MO,TU',
+                [
+                    new ByDayRule([
+                        new WeekDayNum(WeekDay::Monday),
+                        new WeekDayNum(WeekDay::Tuesday),
+                    ]),
+                ],
+            ],
+            'ByDay 2MO,+3TU,-4WE' => [
+                'BYDAY=2MO,+3TU,-4WE',
+                [
+                    new ByDayRule([
+                        new WeekDayNum(WeekDay::Monday, 2),
+                        new WeekDayNum(WeekDay::Tuesday, 3, false),
+                        new WeekDayNum(WeekDay::Wednesday, 4, true),
+                    ]),
+                ],
+            ],
+            'ByMonthDay 1,2' => [
+                'BYMONTHDAY=1,2',
+                [
+                    new ByMonthDayRule([
+                        new MonthDayNum(1),
+                        new MonthDayNum(2),
+                    ]),
+                ],
+            ],
+            'ByMonthDay +1,-2' => [
+                'BYMONTHDAY=+1,-2',
+                [
+                    new ByMonthDayRule([
+                        new MonthDayNum(1, false),
+                        new MonthDayNum(2, true),
+                    ]),
+                ],
+            ],
+            'ByYearDay 128,256' => [
+                'BYYEARDAY=128,256',
+                [
+                    new ByYearDayRule([
+                        new YearDayNum(128),
+                        new YearDayNum(256),
+                    ]),
+                ],
+            ],
+            'ByYearDay +16,-32' => [
+                'BYYEARDAY=+16,-32',
+                [
+                    new ByYearDayRule([
+                        new YearDayNum(16, false),
+                        new YearDayNum(32, true),
+                    ]),
+                ],
+            ],
             'ByWeekNo 1,2' => ['BYWEEKNO=1,2', [new ByWeekNoRule([new WeekNum(1), new WeekNum(2)])]],
             'ByWeekNo +16,-32' => ['BYWEEKNO=+16,-32', [new ByWeekNoRule([new WeekNum(16, false), new WeekNum(32, true)])]],
             'ByMonth 1,2' => ['BYMONTH=1,2', [new ByMonthRule([new MonthNum(1), new MonthNum(2)])]],

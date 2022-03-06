@@ -2,6 +2,7 @@
 
 namespace Brzuchal\RecurrenceRule\ValueObject;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class YearDayNum
 {
     protected readonly int $yearDay;

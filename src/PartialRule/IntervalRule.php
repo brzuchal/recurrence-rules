@@ -5,6 +5,7 @@ namespace Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class IntervalRule implements PartialRule
 {
     /**
@@ -12,7 +13,8 @@ final class IntervalRule implements PartialRule
      */
     public function __construct(
         public readonly int $interval,
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {

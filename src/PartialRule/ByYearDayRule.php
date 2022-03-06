@@ -6,6 +6,7 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByYearDayRule implements PartialRule
 {
     /**
@@ -13,7 +14,8 @@ final class ByYearDayRule implements PartialRule
      */
     public function __construct(
         public readonly array $ydList,
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {

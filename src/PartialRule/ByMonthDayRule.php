@@ -2,10 +2,11 @@
 
 namespace Brzuchal\RecurrenceRule\PartialRule;
 
+use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
-use Brzuchal\RecurrenceRule\PartialRule;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByMonthDayRule implements PartialRule
 {
     /**
@@ -13,7 +14,8 @@ final class ByMonthDayRule implements PartialRule
      */
     public function __construct(
         public readonly array $monthDayList,
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {

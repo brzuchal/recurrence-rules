@@ -5,6 +5,7 @@ namespace Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 
+// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class BySecondRule implements PartialRule
 {
     /**
@@ -12,7 +13,8 @@ final class BySecondRule implements PartialRule
      */
     public function __construct(
         public readonly array $secList,
-    ) {}
+    ) {
+    }
 
     public function build(RuleBuilder $builder): void
     {
