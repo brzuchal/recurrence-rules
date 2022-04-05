@@ -23,7 +23,6 @@ use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 /**
  * Source of definition {@see https://www.rfc-editor.org/rfc/rfc5545.html#section-3.3.10}
  * Format Definition: This value type is defined by the following

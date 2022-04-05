@@ -5,7 +5,6 @@ namespace Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class CountRule implements PartialRule
 {
     /**

@@ -6,7 +6,6 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByYearDayRule implements PartialRule
 {
     /**

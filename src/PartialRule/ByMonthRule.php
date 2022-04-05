@@ -6,7 +6,6 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class ByMonthRule implements PartialRule
 {
     /**

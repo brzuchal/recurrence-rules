@@ -14,7 +14,6 @@ use Brzuchal\RecurrenceRule\WeekDay;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 class RuleBuilderTest extends TestCase
 {
     public function testSecondlyBuild(): void

@@ -6,7 +6,6 @@ use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 use DateTimeImmutable;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class UntilRule implements PartialRule
 {
     public function __construct(

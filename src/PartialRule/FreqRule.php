@@ -6,7 +6,6 @@ use Brzuchal\RecurrenceRule\Freq;
 use Brzuchal\RecurrenceRule\PartialRule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 final class FreqRule implements PartialRule
 {
     public function __construct(

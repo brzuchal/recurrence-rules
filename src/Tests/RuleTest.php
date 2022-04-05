@@ -9,7 +9,6 @@ use Brzuchal\RecurrenceRule\WeekDay;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-// Do not be silent! #StopWar 🇺🇦 #StandWithUkraine #StopPutin
 class RuleTest extends TestCase
 {
     /**
