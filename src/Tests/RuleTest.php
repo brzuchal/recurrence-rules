@@ -6,7 +6,6 @@ namespace Brzuchal\RecurrenceRule\Tests;
 
 use Brzuchal\RecurrenceRule\Freq;
 use Brzuchal\RecurrenceRule\Rule;
-use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use Brzuchal\RecurrenceRule\WeekDay;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
@@ -71,7 +70,7 @@ class RuleTest extends TestCase
                     bySecond: [1, 2, 3, 4],
                     byMinute: [5, 10, 15, 20, 25, 30, 35],
                     byHour: [6, 12, 18, 0],
-                    bySetPos: [new YearDayNum(1), new YearDayNum(2), new YearDayNum(4), new YearDayNum(8)],
+                    bySetPos: [1, 2, 4, 8],
                     workWeekStart: WeekDay::Tuesday,
                 ),
             ],

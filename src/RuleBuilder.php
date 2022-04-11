@@ -4,92 +4,82 @@ declare(strict_types=1);
 
 namespace Brzuchal\RecurrenceRule;
 
-use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
-use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
 
+/**
+ * @psalm-import-type second from Rule
+ * @psalm-import-type minute from Rule
+ * @psalm-import-type hour from Rule
+ * @psalm-import-type monthday from Rule
+ * @psalm-import-type yearday from Rule
+ * @psalm-import-type weekno from Rule
+ * @psalm-import-type monthno from Rule
+ */
 final class RuleBuilder
 {
-    private Freq|null $freq = null;
     private DateTimeImmutable|null $until = null;
     /** @psalm-var positive-int|null */
     private int|null $interval = null;
     /** @psalm-var positive-int|null */
     private int|null $count = null;
+    /** @psalm-var non-empty-list<second>|null */
     private array|null $secList = null;
+    /** @psalm-var non-empty-list<minute>|null */
     private array|null $minList = null;
+    /** @psalm-var non-empty-list<hour>|null */
     private array|null $hrList = null;
-    /** @psalm-var list<WeekDayNum>|null */
+    /** @psalm-var non-empty-list<WeekDayNum>|null */
     private array|null $dList = null;
-    /** @psalm-var list<MonthDayNum>|null */
+    /** @psalm-var non-empty-list<monthday>|null */
     private array|null $mdList = null;
-    /** @psalm-var list<YearDayNum>|null */
+    /** @psalm-var non-empty-list<yearday>|null */
     private array|null $ydList = null;
-    /** @psalm-var list<WeekNum>|null */
+    /** @psalm-var non-empty-list<weekno>|null */
     private array|null $wnList = null;
-    /** @psalm-var list<MonthNum>|null  */
+    /** @psalm-var non-empty-list<monthno>|null  */
     private array|null $moList = null;
-    /** @psalm-var list<YearDayNum>|null */
+    /** @psalm-var non-empty-list<yearday>|null */
     private array|null $spList = null;
     private WeekDay|null $wkst = null;
 
-    public function secondly(): self
-    {
-        $this->freq = Freq::Secondly;
-
-        return $this;
+    public function __construct(
+        private Freq $freq
+    ) {
     }
 
-    public function minutely(): self
+    public static function secondly(): self
     {
-        $this->freq = Freq::Minutely;
-
-        return $this;
+        return new self(Freq::Secondly);
     }
 
-    public function hourly(): self
+    public static function minutely(): self
     {
-        $this->freq = Freq::Hourly;
-
-        return $this;
+        return new self(Freq::Minutely);
     }
 
-    public function daily(): self
+    public static function hourly(): self
     {
-        $this->freq = Freq::Daily;
-
-        return $this;
+        return new self(Freq::Hourly);
     }
 
-    public function weekly(): self
+    public static function daily(): self
     {
-        $this->freq = Freq::Weekly;
-
-        return $this;
+        return new self(Freq::Daily);
     }
 
-    public function monthly(): self
+    public static function weekly(): self
     {
-        $this->freq = Freq::Monthly;
-
-        return $this;
+        return new self(Freq::Weekly);
     }
 
-    public function yearly(): self
+    public static function monthly(): self
     {
-        $this->freq = Freq::Yearly;
-
-        return $this;
+        return new self(Freq::Monthly);
     }
 
-    public function freq(Freq $freq): self
+    public static function yearly(): self
     {
-        $this->freq = $freq;
-
-        return $this;
+        return new self(Freq::Yearly);
     }
 
     public function until(DateTimeImmutable $dateTime): self
@@ -99,13 +89,12 @@ final class RuleBuilder
         return $this;
     }
 
+    /**
+     * @param positive-int $count
+     * @return $this
+     */
     public function count(int $count): self
     {
-        if ($count < 0) {
-            throw new \InvalidArgumentException('Expected positive int');
-        }
-
-        \assert($count > 1);
         $this->count = $count;
 
         return $this;
@@ -113,6 +102,7 @@ final class RuleBuilder
 
     /**
      * @psalm-param positive-int $interval
+     * @return $this
      */
     public function interval(int $interval): self
     {
@@ -121,104 +111,108 @@ final class RuleBuilder
         return $this;
     }
 
-    public function bySecond(array $secList): self
+    /**
+     * @param second ...$secList
+     * @return $this
+     */
+    public function bySecond(int ...$secList): self
     {
-        if (!empty(\array_filter($secList, static fn ($sec) => !\is_int($sec) || $sec > 60 || $sec < 0))) {
-            throw new \UnexpectedValueException('Expected array of seconds');
-        }
-
+        /** @psalm-var non-empty-list<second> secList */
         $this->secList = $secList;
 
         return $this;
     }
 
-    public function byMinute(array $minList): self
+    /**
+     * @param minute ...$minList
+     * @return $this
+     */
+    public function byMinute(int ...$minList): self
     {
-        if (!empty(\array_filter($minList, static fn ($min) => !\is_int($min) || $min > 59 || $min < 0))) {
-            throw new \UnexpectedValueException('Expected array of minutes');
-        }
-
+        /** @psalm-var non-empty-list<minute> minList */
         $this->minList = $minList;
 
         return $this;
     }
 
-    public function byHour(array $hrList): self
+    /**
+     * @param hour ...$hrList
+     * @return $this
+     */
+    public function byHour(int ...$hrList): self
     {
-        if (!empty(\array_filter($hrList, static fn ($hour) => !\is_int($hour) || $hour > 23 || $hour < 0))) {
-            throw new \UnexpectedValueException('Expected array of hours');
-        }
-
+        /** @psalm-var non-empty-list<hour> hrList */
         $this->hrList = $hrList;
 
         return $this;
     }
 
     /**
-     * @psalm-param list<WeekDayNum> $dList
      * @return $this
      */
-    public function byDay(array $dList): self
+    public function byDay(WeekDayNum ...$dList): self
     {
-        if (!empty(\array_filter($dList, static fn ($day) => !($day instanceof WeekDayNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . WeekDayNum::class);
-        }
-
+        /** @psalm-var non-empty-list<WeekDayNum> dList */
         $this->dList = $dList;
 
         return $this;
     }
 
-    public function byMonthDay(array $mdList): self
+    /**
+     * @param monthday ...$mdList
+     * @return $this
+     */
+    public function byMonthDay(int ...$mdList): self
     {
-        if (!empty(\array_filter($mdList, static fn ($monthDay) => !($monthDay instanceof MonthDayNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . MonthDayNum::class);
-        }
-
+        /** @psalm-var non-empty-list<monthday> mdList */
         $this->mdList = $mdList;
 
         return $this;
     }
 
-    public function byYearDay(array $ydList): self
+    /**
+     * @param yearday ...$ydList
+     * @return $this
+     */
+    public function byYearDay(int ...$ydList): self
     {
-        if (!empty(\array_filter($ydList, static fn ($yearDay) => !($yearDay instanceof YearDayNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . YearDayNum::class);
-        }
-
+        /** @psalm-var non-empty-list<yearday> ydList */
         $this->ydList = $ydList;
 
         return $this;
     }
 
-    public function byWeekNo(array $wnList): self
+    /**
+     * @param weekno ...$wnList
+     * @return $this
+     */
+    public function byWeekNo(int ...$wnList): self
     {
-        if (!empty(\array_filter($wnList, static fn ($weekNum) => !($weekNum instanceof WeekNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . WeekNum::class);
-        }
-
+        /** @psalm-var non-empty-list<weekno> wnList */
         $this->wnList = $wnList;
 
         return $this;
     }
 
-    public function byMonth(array $moList): self
+    /**
+     * @param monthno ...$moList
+     * @return $this
+     */
+    public function byMonth(int ...$moList): self
     {
-        if (!empty(\array_filter($moList, static fn ($monthNum) => !($monthNum instanceof MonthNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . MonthNum::class);
-        }
-
+        /** @psalm-var non-empty-list<monthno> moList */
         $this->moList = $moList;
 
         return $this;
     }
 
-    public function bySetPos(array $spList): self
+    /**
+     * @param yearday ...$spList
+     * @return $this
+     */
+    public function bySetPos(int ...$spList): self
     {
-        if (!empty(\array_filter($spList, static fn ($yearDay) => !($yearDay instanceof YearDayNum)))) {
-            throw new \UnexpectedValueException('Expected array of ' . YearDayNum::class);
-        }
-
+        /** @psalm-var non-empty-list<yearday> spList */
         $this->spList = $spList;
 
         return $this;
@@ -233,10 +227,6 @@ final class RuleBuilder
 
     public function build(): Rule
     {
-        if ($this->freq === null) {
-            throw new \BadMethodCallException('Frequency has to be defined first');
-        }
-
         return new Rule(
             freq: $this->freq,
             until: $this->until,

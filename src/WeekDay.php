@@ -13,4 +13,9 @@ enum WeekDay: string
     case Thursday = 'TH';
     case Friday = 'FR';
     case Saturday = 'SA';
+
+    public function num(int $ordWeek): WeekDayNum
+    {
+        return new WeekDayNum($this, $ordWeek);
+    }
 }

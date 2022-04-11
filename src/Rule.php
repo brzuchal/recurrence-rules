@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace Brzuchal\RecurrenceRule;
 
-use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
-use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use DateTimeImmutable;
+use InvalidArgumentException;
 
+/**
+ * @psalm-type second int<0,59>
+ * @psalm-type minute int<0,59>
+ * @psalm-type hour int<0,24>
+ * @psalm-type monthday int<-31,-1>|int<1,31>
+ * @psalm-type yearday int<-366,-1>|int<1,366>
+ * @psalm-type weekno int<-53,-1>|int<1,53>
+ * @psalm-type monthno int<-12,-1>|int<1,12>
+ */
 final class Rule
 {
     /**
      * @psalm-param positive-int|null $count
      * @psalm-param positive-int|null $interval
-     * @psalm-param list<positive-int>|null $bySecond
-     * @psalm-param list<positive-int>|null $byMinute
-     * @psalm-param list<positive-int>|null $byHour
-     * @psalm-param list<WeekDayNum>|null $byDay
-     * @psalm-param list<MonthDayNum>|null $byMonthDay
-     * @psalm-param list<YearDayNum>|null $byYearDay
-     * @psalm-param list<WeekNum>|null $byWeekNo
-     * @psalm-param list<MonthNum>|null $byMonth
-     * @psalm-param list<YearDayNum>|null $bySetPos
+     * @psalm-param non-empty-list<second>|null $bySecond
+     * @psalm-param non-empty-list<minute>|null $byMinute
+     * @psalm-param non-empty-list<hour>|null $byHour
+     * @psalm-param non-empty-list<WeekDayNum>|null $byDay
+     * @psalm-param non-empty-list<monthday>|null $byMonthDay
+     * @psalm-param non-empty-list<yearday>|null $byYearDay
+     * @psalm-param non-empty-list<weekno>|null $byWeekNo
+     * @psalm-param non-empty-list<monthno>|null $byMonth
+     * @psalm-param non-empty-list<yearday>|null $bySetPos
      */
     public function __construct(
         public readonly Freq $freq,
@@ -42,24 +47,70 @@ final class Rule
         public readonly array|null $bySetPos = null,
         public readonly WeekDay|null $workWeekStart = null,
     ) {
-        if ($this->byDay !== null && !($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)) {
-            throw new \InvalidArgumentException('The BYDAY rule part MUST NOT be specified with a numeric value when the FREQ rule part is not set to MONTHLY or YEARLY.');
+        if ($this->bySecond !== null) {
+            \array_map(RuleValidator::assertSecondNum(...), $this->bySecond);
         }
 
-        if ($this->byDay !== null && $this->byWeekNo !== null && $this->freq === Freq::Yearly) {
-            throw new \InvalidArgumentException('The BYDAY rule part MUST NOT be specified with a numeric value with the FREQ rule part set to YEARLY when the BYWEEKNO rule part is specified.');
+        if ($this->byMinute !== null) {
+            \array_map(RuleValidator::assertMinuteNum(...), $this->byMinute);
+        }
+
+        if ($this->byHour !== null) {
+            \array_map(RuleValidator::assertHourNum(...), $this->byHour);
+        }
+
+        if ($this->byDay !== null) {
+            \array_map(RuleValidator::assertWeekDayNum(...), $this->byDay);
+        }
+
+        if ($this->byMonthDay !== null) {
+            \array_map(RuleValidator::assertMonthDayNum(...), $this->byMonthDay);
+        }
+
+        if ($this->byYearDay !== null) {
+            \array_map(RuleValidator::assertYearDayNum(...), $this->byYearDay);
+        }
+
+        if ($this->byWeekNo !== null) {
+            \array_map(RuleValidator::assertWeekNum(...), $this->byWeekNo);
+        }
+
+        if ($this->byMonth !== null) {
+            \array_map(RuleValidator::assertMonthNum(...), $this->byMonth);
+        }
+
+        if ($this->bySetPos !== null) {
+            \array_map(RuleValidator::assertYearDayNum(...), $this->bySetPos);
+        }
+
+        if ($this->byDay !== null && !($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)) {
+            throw new InvalidArgumentException('The BYDAY rule part MUST NOT be specified with a numeric value when the FREQ rule part is not set to MONTHLY or YEARLY.');
+        }
+
+        if (
+            $this->byDay !== null &&
+            \array_sum(\array_map(
+                static fn (WeekDayNum $weekDayNum) => $weekDayNum->ordWeek !== null,
+                $this->byDay
+            )) &&
+            $this->byWeekNo !== null &&
+            $this->freq === Freq::Yearly
+        ) {
+            throw new InvalidArgumentException(
+                'The BYDAY rule part with week ordinal MUST NOT be specified with a numeric value with the FREQ rule part set to YEARLY when the BYWEEKNO rule part is specified.',
+            );
         }
 
         if ($this->byMonthDay !== null && $this->freq === Freq::Weekly) {
-            throw new \InvalidArgumentException('The BYMONTHDAY rule part MUST NOT be specified when the FREQ rule part is set to WEEKLY.');
+            throw new InvalidArgumentException('The BYMONTHDAY rule part MUST NOT be specified when the FREQ rule part is set to WEEKLY.');
         }
 
         if ($this->byYearDay !== null && ($this->freq === Freq::Daily || $this->freq === Freq::Weekly || $this->freq === Freq::Monthly)) {
-            throw new \InvalidArgumentException('The BYYEARDAY rule part MUST NOT be specified when the FREQ rule part is set to DAILY, WEEKLY, or MONTHLY.');
+            throw new InvalidArgumentException('The BYYEARDAY rule part MUST NOT be specified when the FREQ rule part is set to DAILY, WEEKLY, or MONTHLY.');
         }
 
         if ($this->byWeekNo !== null && $this->freq !== Freq::Yearly) {
-            throw new \InvalidArgumentException('The BYWEEKNO rule part MUST NOT be used when the FREQ rule part is set to anything other than YEARLY.');
+            throw new InvalidArgumentException('The BYWEEKNO rule part MUST NOT be used when the FREQ rule part is set to anything other than YEARLY.');
         }
 
         if (
@@ -73,7 +124,7 @@ final class Rule
             $this->byMinute === null &&
             $this->bySecond === null
         ) {
-            throw new \InvalidArgumentException('The BYSETPOS rule part MUST only be used in conjunction with another BYxxx rule part.');
+            throw new InvalidArgumentException('The BYSETPOS rule part MUST only be used in conjunction with another BYxxx rule part.');
         }
     }
 

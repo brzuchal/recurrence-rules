@@ -7,12 +7,8 @@ namespace Brzuchal\RecurrenceRule\Tests;
 use Brzuchal\RecurrenceRule\Freq;
 use Brzuchal\RecurrenceRule\Rule;
 use Brzuchal\RecurrenceRule\RuleBuilder;
-use Brzuchal\RecurrenceRule\ValueObject\MonthDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\MonthNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekDayNum;
-use Brzuchal\RecurrenceRule\ValueObject\WeekNum;
-use Brzuchal\RecurrenceRule\ValueObject\YearDayNum;
 use Brzuchal\RecurrenceRule\WeekDay;
+use Brzuchal\RecurrenceRule\WeekDayNum;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +18,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Secondly),
-            (new RuleBuilder())->secondly()->build(),
+            RuleBuilder::secondly()->build(),
         );
     }
 
@@ -30,7 +26,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Minutely),
-            (new RuleBuilder())->minutely()->build(),
+            RuleBuilder::minutely()->build(),
         );
     }
 
@@ -38,7 +34,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Hourly),
-            (new RuleBuilder())->hourly()->build(),
+            RuleBuilder::hourly()->build(),
         );
     }
 
@@ -46,7 +42,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Daily),
-            (new RuleBuilder())->daily()->build(),
+            RuleBuilder::daily()->build(),
         );
     }
 
@@ -54,7 +50,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Weekly),
-            (new RuleBuilder())->weekly()->build(),
+            RuleBuilder::weekly()->build(),
         );
     }
 
@@ -62,7 +58,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Monthly),
-            (new RuleBuilder())->monthly()->build(),
+            RuleBuilder::monthly()->build(),
         );
     }
 
@@ -70,7 +66,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Yearly),
-            (new RuleBuilder())->yearly()->build(),
+            RuleBuilder::yearly()->build(),
         );
     }
 
@@ -79,7 +75,7 @@ class RuleBuilderTest extends TestCase
         $dateTime = new DateTimeImmutable('2021-12-31 23:59:59');
         $this->assertEquals(
             new Rule(freq: Freq::Daily, until: $dateTime),
-            (new RuleBuilder())->daily()->until($dateTime)->build(),
+            RuleBuilder::daily()->until($dateTime)->build(),
         );
     }
 
@@ -87,7 +83,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Daily, count: 2),
-            (new RuleBuilder())->daily()->count(2)->build(),
+            RuleBuilder::daily()->count(2)->build(),
         );
     }
 
@@ -95,7 +91,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Daily, interval: 2),
-            (new RuleBuilder())->daily()->interval(2)->build(),
+            RuleBuilder::daily()->interval(2)->build(),
         );
     }
 
@@ -103,7 +99,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Minutely, bySecond: [1, 31]),
-            (new RuleBuilder())->minutely()->bySecond([1, 31])->build(),
+            RuleBuilder::minutely()->bySecond(1, 31)->build(),
         );
     }
 
@@ -111,7 +107,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Hourly, byMinute: [1, 31]),
-            (new RuleBuilder())->hourly()->byMinute([1, 31])->build(),
+            RuleBuilder::hourly()->byMinute(1, 31)->build(),
         );
     }
 
@@ -119,7 +115,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Daily, byHour: [1, 23]),
-            (new RuleBuilder())->daily()->byHour([1, 23])->build(),
+            RuleBuilder::daily()->byHour(1, 23)->build(),
         );
     }
 
@@ -128,53 +124,47 @@ class RuleBuilderTest extends TestCase
         $weekDayNum = new WeekDayNum(WeekDay::Monday, 1);
         $this->assertEquals(
             new Rule(freq: Freq::Monthly, byDay: [$weekDayNum]),
-            (new RuleBuilder())->monthly()->byDay([$weekDayNum])->build(),
+            RuleBuilder::monthly()->byDay($weekDayNum)->build(),
         );
     }
 
     public function testYearlyByMonthDay(): void
     {
-        $monthDay = new MonthDayNum(1);
         $this->assertEquals(
-            new Rule(freq: Freq::Yearly, byMonthDay: [$monthDay]),
-            (new RuleBuilder())->yearly()->byMonthDay([$monthDay])->build(),
+            new Rule(freq: Freq::Yearly, byMonthDay: [1]),
+            RuleBuilder::yearly()->byMonthDay(1)->build(),
         );
     }
 
     public function testYearlyByYearDay(): void
     {
-        $yearDay = new YearDayNum(128);
         $this->assertEquals(
-            new Rule(freq: Freq::Yearly, byYearDay: [$yearDay]),
-            (new RuleBuilder())->yearly()->byYearDay([$yearDay])->build(),
+            new Rule(freq: Freq::Yearly, byYearDay: [128]),
+            RuleBuilder::yearly()->byYearDay(128)->build(),
         );
     }
 
     public function testYearlyByWeekNo(): void
     {
-        $weekNum = new WeekNum(16);
         $this->assertEquals(
-            new Rule(freq: Freq::Yearly, byWeekNo: [$weekNum]),
-            (new RuleBuilder())->yearly()->byWeekNo([$weekNum])->build(),
+            new Rule(freq: Freq::Yearly, byWeekNo: [16]),
+            RuleBuilder::yearly()->byWeekNo(16)->build(),
         );
     }
 
     public function testYearlyByMonth(): void
     {
-        $monthNum = new MonthNum(2);
         $this->assertEquals(
-            new Rule(freq: Freq::Yearly, byMonth: [$monthNum]),
-            (new RuleBuilder())->yearly()->byMonth([$monthNum])->build(),
+            new Rule(freq: Freq::Yearly, byMonth: [2]),
+            RuleBuilder::yearly()->byMonth(2)->build(),
         );
     }
 
     public function testYearlyBySetPos(): void
     {
-        $monthNum = new MonthNum(2);
-        $yearDay = new YearDayNum(128);
         $this->assertEquals(
-            new Rule(freq: Freq::Yearly, byMonth: [$monthNum], bySetPos: [$yearDay]),
-            (new RuleBuilder())->yearly()->byMonth([$monthNum])->bySetPos([$yearDay])->build(),
+            new Rule(freq: Freq::Yearly, byMonth: [2], bySetPos: [128]),
+            RuleBuilder::yearly()->byMonth(2)->bySetPos(128)->build(),
         );
     }
 
@@ -182,7 +172,7 @@ class RuleBuilderTest extends TestCase
     {
         $this->assertEquals(
             new Rule(freq: Freq::Yearly, workWeekStart: WeekDay::Monday),
-            (new RuleBuilder())->yearly()->workWeekStart(WeekDay::Monday)->build(),
+            RuleBuilder::yearly()->workWeekStart(WeekDay::Monday)->build(),
         );
     }
 }

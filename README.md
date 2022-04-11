@@ -15,9 +15,15 @@ A recurrence processor for PHP
 This library parses recurrence strings as defined in RFC 5545 and RFC 2445 and iterates the instances.
 In addition, it can be used to build valid recurrence strings in a convenient manner.
 
-The Rule class is implemented in immutable manner, use RuleBuilder for convenient approcha to build Rule objects.
+The Rule class is implemented in immutable manner, use RuleBuilder for convenient approch to build Rule objects.
 
-Please note that the interface of the classes in this library is not finalized yet and subject to change.
+> **NOTE!** Temporarily the RuleIterator relies on [rlanvin/php-rrule](https://github.com/rlanvin/php-rrule)
+> wrapping the library under the hood while returning `DateTimeImmutable` objects instead.
+> This approach is a temporary for complex logic of limiting and expanding which in future will be replaced
+> with a set of filters/expanders in more OOP fashion way highly inspired by Java implementation of 
+> [dmfs/lib-recur](https://github.com/dmfs/lib-recur/tree/master/src/main/java/org/dmfs/rfc5545/recur).
+
+> **NOTE!** The interface of the classes in this library is not finalized yet and subject to change.
 
 [![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
@@ -30,10 +36,15 @@ composer require brzuchal/recurrence-rules
 ## Usage
 
 ```php
-use Brzuchal\RecurrenceRule\RfcParser;
+use Brzuchal\RecurrenceRule\RuleFactory;
+use Brzuchal\RecurrenceRule\RuleIterator;
 
-$rule = RfcParser::fromString('FREQ=MONTHLY;COUNT=1;INTERVAL=2;BYDAY=MO,TU;WKST=TU')
+$rule = RuleFactory::fromString('FREQ=MONTHLY;COUNT=4;INTERVAL=2;BYDAY=MO,TU;WKST=TU');
 echo $rule->toString(); // FREQ=MONTHLY;COUNT=1;INTERVAL=2;BYDAY=MO,TU;WKST=TU
+
+foreach (new RuleIterator(new DateTimeImmutable('2006-08-01'), $rule) as $occurrence) {
+    echo $occurrence->format('Y-m-d'),", ";
+} // 2006-08-01, 2006-08-07, 2006-08-08, 2006-08-14,
 ```
 
 ---
