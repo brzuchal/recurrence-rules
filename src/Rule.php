@@ -83,7 +83,14 @@ final class Rule
             \array_map(RuleValidator::assertYearDayNum(...), $this->bySetPos);
         }
 
-        if ($this->byDay !== null && !($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)) {
+        if (
+            $this->byDay !== null &&
+            \array_sum(\array_map(
+                static fn (WeekDayNum $weekDayNum) => $weekDayNum->ordWeek !== null,
+                $this->byDay
+            )) &&
+            !($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)
+        ) {
             throw new InvalidArgumentException('The BYDAY rule part MUST NOT be specified with a numeric value when the FREQ rule part is not set to MONTHLY or YEARLY.');
         }
 
