@@ -149,11 +149,17 @@ final class RuleFactory
         $dateTimeString = \substr($partialRule, 6);
 
         /** @psalm-suppress PossiblyFalseReference */
-        return match (\strlen($dateTimeString)) {
+        $dateTime = match (\strlen($dateTimeString)) {
             8 => DateTimeImmutable::createFromFormat('Ymd', $dateTimeString)->setTime(23, 59, 59),
             15 => DateTimeImmutable::createFromFormat('Ymd\THis', $dateTimeString),
             default => throw self::error(sprintf('UNTIL=%s', $partialRule), 'unsupported date format'),
         };
+
+        if (! ($dateTime instanceof DateTimeImmutable)) {
+            throw self::error(sprintf('UNTIL=%s', $partialRule), 'unsupported date format');
+        }
+
+        return $dateTime;
     }
 
     /**
@@ -470,12 +476,11 @@ final class RuleFactory
     /**
      * @psalm-param T $max
      *
-     * @psalm-return non-empty-list<Tr>
+     * @psalm-return non-empty-list<int<1,T>>
      *
      * @throws UnexpectedValueException
      *
      * @template T as positive-int
-     * @psalm-type Tr int<1,T>
      * @psalm-suppress MoreSpecificReturnType,LessSpecificReturnStatement
      */
     private static function tryParseLimitedNumberList(string $ruleName, string $value, int $max): array
