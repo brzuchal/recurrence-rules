@@ -6,6 +6,8 @@ namespace Brzuchal\RecurrenceRule;
 
 use UnexpectedValueException;
 
+use function sprintf;
+
 final class WeekDayNum
 {
     // phpcs:ignore
@@ -17,7 +19,10 @@ final class WeekDayNum
         int|null $ordWeek = null,
     ) {
         if ($ordWeek !== null && ($ordWeek === 0 || $ordWeek < -53 || $ordWeek > 53)) {
-            throw new UnexpectedValueException("Expected ordinal number of week, given: {$ordWeek} instead");
+            throw new UnexpectedValueException(sprintf(
+                'Expected ordinal number of week, given: %s instead',
+                $ordWeek,
+            ));
         }
 
         $this->ordWeek = $ordWeek;

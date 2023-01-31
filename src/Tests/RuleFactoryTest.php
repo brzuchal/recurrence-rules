@@ -22,6 +22,9 @@ class RuleFactoryTest extends TestCase
         $this->assertEquals($expected, RuleFactory::fromString($rule));
     }
 
+    /**
+     * @psalm-return array<array-key, array{0:string, 1:Rule}>
+     */
     public function dataValidPartialRules(): array
     {
         return [

@@ -9,6 +9,7 @@ use Brzuchal\RecurrenceRule\Rule;
 use Brzuchal\RecurrenceRule\RuleIterator;
 use Brzuchal\RecurrenceRule\WeekDay;
 use Brzuchal\RecurrenceRule\WeekDayNum;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use PHPUnit\Framework\TestCase;
@@ -39,20 +40,24 @@ class RuleIteratorTest extends TestCase
     }
 
     /**
+     * @psalm-param non-empty-list<DateTime> $occurrences
+     *
      * @dataProvider yearlyRules
      * @dataProvider monthlyRules
-     * @psalm-param list<DateTimeImmutable>
      */
     public function testOccurrences(Rule $rule, array $occurrences): void
     {
         $iterator = new RuleIterator(new DateTimeImmutable('1997-09-02'), $rule);
         foreach ($iterator as $occurence => $date) {
+            \assert($occurrences[$occurence] instanceof DateTime);
             $this->assertEquals($occurrences[$occurence], $date);
         }
     }
 
     /**
      * YEARLY rules, mostly taken from Python test suite.
+     *
+     * @psalm-return array<array-key, array{0:Rule, 1:non-empty-list<\DateTime>}>
      */
     public function yearlyRules(): array
     {
@@ -492,6 +497,8 @@ class RuleIteratorTest extends TestCase
 
     /**
      * MONTHY rules, mostly taken from the Python test suite
+     *
+     * @psalm-return array<array-key, array{0:Rule, 1:non-empty-list<\DateTime>}>
      */
     public function monthlyRules(): array
     {

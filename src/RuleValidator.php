@@ -6,6 +6,8 @@ namespace Brzuchal\RecurrenceRule;
 
 use UnexpectedValueException;
 
+use function sprintf;
+
 final class RuleValidator
 {
     /**
@@ -17,7 +19,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid month day number, given: {$monthDay} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid month day number, given: %s instead',
+            $monthDay,
+        ));
     }
 
     /**
@@ -29,7 +34,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid ordinal day in year number, given: {$yearDay} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid ordinal day in year number, given: %s instead',
+            $yearDay,
+        ));
     }
 
     /**
@@ -41,7 +49,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid ordinal number of week, given: {$week} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid ordinal number of week, given: %s instead',
+            $week,
+        ));
     }
 
     /**
@@ -53,7 +64,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid month number, given: {$month} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid month number, given: %s instead',
+            $month,
+        ));
     }
 
     /**
@@ -65,7 +79,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid second number, given: {$second} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid second number, given: %s instead',
+            $second,
+        ));
     }
 
     /**
@@ -77,7 +94,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid minute number, given: {$minute} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid minute number, given: %s instead',
+            $minute,
+        ));
     }
 
     /**
@@ -89,7 +109,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException("Expected valid hour number, given: {$hour} instead");
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid hour number, given: %s instead',
+            $hour,
+        ));
     }
 
     public static function assertWeekDayNum(mixed $day): void
@@ -98,9 +121,10 @@ final class RuleValidator
             return;
         }
 
-        throw new UnexpectedValueException(\sprintf(
-            "Expected valid %s, given: {$day} instead",
+        throw new UnexpectedValueException(sprintf(
+            'Expected valid %s, given: %s instead',
             WeekDayNum::class,
+            \gettype($day),
         ));
     }
 }

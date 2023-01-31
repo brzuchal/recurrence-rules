@@ -1,37 +1,16 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
     <arg name="basepath" value="."/>
-    <arg name="extensions" value="php"/>
-    <arg name="parallel" value="80"/>
     <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
-
-    <!-- Ignore warnings, show progress of the run and show sniff names -->
-    <arg value="nps"/>
-
-    <!-- Directories to be checked -->
-    <file>src</file>
-
-    <!-- Include full Doctrine Coding Standard -->
+    <arg name="extensions" value="php"/>
     <rule ref="Doctrine">
-        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSame"/>
-        <exclude name="Generic.Formatting.SpaceAfterNot.Incorrect"/>
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
         <exclude name="PSR12.Files.OpenTag.NotAlone"/>
-        <exclude name="Squiz.Strings.DoubleQuoteUsage.ContainsVar"/>
-        <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectAnnotationsGroup"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse"/>
         <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification"/>
-        <!-- This has to be ignored until the rule start playing with first class function citizens -->
-        <exclude name="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking.UnpackingUsed"/>
+        <exclude name="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
     </rule>
-    <rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
-        <exclude-pattern>src/Freq.php</exclude-pattern>
-        <exclude-pattern>src/WeekDay.php</exclude-pattern>
-    </rule>
-    <rule ref="Generic.WhiteSpace.ScopeIndent.Incorrect">
-        <exclude-pattern>src/Freq.php</exclude-pattern>
-        <exclude-pattern>src/WeekDay.php</exclude-pattern>
-    </rule>
+    <file>src/</file>
 </ruleset>
