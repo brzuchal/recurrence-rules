@@ -97,6 +97,13 @@ class RuleFactoryTest extends TestCase
                     new WeekDayNum(WeekDay::Tuesday),
                 ]),
             ],
+            'Weekly ByDay MO,TU' => [
+                'FREQ=WEEKLY;BYDAY=MO,TU',
+                new Rule(freq: Freq::Weekly, byDay: [
+                    new WeekDayNum(WeekDay::Monday),
+                    new WeekDayNum(WeekDay::Tuesday),
+                ]),
+            ],
             'ByDay 2MO,+3TU,-4WE' => [
                 'FREQ=YEARLY;BYDAY=2MO,+3TU,-4WE',
                 new Rule(
