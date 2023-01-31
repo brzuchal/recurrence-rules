@@ -7,6 +7,8 @@ namespace Brzuchal\RecurrenceRule;
 use DateTimeImmutable;
 use UnexpectedValueException;
 
+use function sprintf;
+
 /**
  * Source of definition {@see https://www.rfc-editor.org/rfc/rfc5545.html#section-3.3.10}
  * Format Definition: This value type is defined by the following
@@ -150,12 +152,13 @@ final class RuleFactory
         return match (\strlen($dateTimeString)) {
             8 => DateTimeImmutable::createFromFormat('Ymd', $dateTimeString)->setTime(23, 59, 59),
             15 => DateTimeImmutable::createFromFormat('Ymd\THis', $dateTimeString),
-            default => throw self::error("UNTIL={$partialRule}", 'unsupported date format'),
+            default => throw self::error(sprintf('UNTIL=%s', $partialRule), 'unsupported date format'),
         };
     }
 
     /**
      * @psalm-return positive-int
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseCount(string $partialRule): int
@@ -165,6 +168,7 @@ final class RuleFactory
 
     /**
      * @psalm-return positive-int
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseInterval(string $partialRule): int
@@ -174,17 +178,21 @@ final class RuleFactory
 
     /**
      * @psalm-return positive-int
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParsePositiveInt(string $ruleName, string $partialRule): int
     {
         if (\strpos($partialRule, $ruleName) !== 0) {
-            throw self::error("{$ruleName}={$partialRule}");
+            throw self::error(sprintf('%s=%s', $ruleName, $partialRule));
         }
 
         $numberString = \substr($partialRule, \strlen($ruleName));
-        if (!\is_numeric($numberString) || \intval($numberString) < 0) {
-            throw self::error("{$ruleName}={$partialRule}", "expected positive integer, instead: {$numberString} given");
+        if (! \is_numeric($numberString) || \intval($numberString) < 0) {
+            throw self::error(
+                sprintf('%s=%s', $ruleName, $partialRule),
+                sprintf('expected positive integer, instead: %s given', $numberString),
+            );
         }
 
         $number = \intval($numberString);
@@ -239,12 +247,14 @@ final class RuleFactory
 
     /**
      * @psalm-return non-empty-list<second>
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseBySecond(string $value): array
     {
         /** @psalm-var non-empty-list<second> $seconds */
         $seconds = self::tryParseLimitedNumberList('BYSECOND', $value, 60);
+        // phpcs:ignore
         \assert(\array_product(\array_map(\is_int(...), $seconds)) === 1);
 
         return $seconds;
@@ -252,12 +262,14 @@ final class RuleFactory
 
     /**
      * @psalm-return non-empty-list<minute>
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseByMinute(string $value): array
     {
         /** @psalm-var non-empty-list<minute> $minutes */
         $minutes = self::tryParseLimitedNumberList('BYMINUTE', $value, 60);
+        // phpcs:ignore
         \assert(\array_product(\array_map(\is_int(...), $minutes)) === 1);
 
         return $minutes;
@@ -265,12 +277,14 @@ final class RuleFactory
 
     /**
      * @psalm-return non-empty-list<hour>
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseByHour(string $value): array
     {
         /** @psalm-var non-empty-list<hour> $hours */
         $hours = self::tryParseLimitedNumberList('BYHOUR', $value, 23);
+        // phpcs:ignore
         \assert(\array_product(\array_map(\is_int(...), $hours)) === 1);
 
         return $hours;
@@ -291,7 +305,10 @@ final class RuleFactory
     {
         $length = \strlen($weekDayNum);
         if ($length < 2) {
-            throw self::error('BYDAY=' . $weekDayNum, 'expected at least valid week day name');
+            throw self::error(
+                sprintf('BYDAY=%s', $weekDayNum),
+                'expected at least valid week day name',
+            );
         }
 
         $weekDay = WeekDay::from(\substr($weekDayNum, -2, 2));
@@ -306,12 +323,15 @@ final class RuleFactory
         };
         $ordWeekNumber = \substr($weekDayNum, $negative !== null ? 1 : 0, -2);
         if (
-            !\is_numeric($ordWeekNumber) ||
+            ! \is_numeric($ordWeekNumber) ||
             \intval($ordWeekNumber) < -53 ||
             \intval($ordWeekNumber) > 53 ||
             \intval($ordWeekNumber) === 0
         ) {
-            throw self::error('BYDAY=' . $weekDayNum, 'expected valid week ordinal number');
+            throw self::error(
+                sprintf('BYDAY=%s', $weekDayNum),
+                'expected valid week ordinal number',
+            );
         }
 
         $ordWeek = \intval($ordWeekNumber);
@@ -329,6 +349,7 @@ final class RuleFactory
 
     /**
      * @psalm-return monthday
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseMonthDayNum(string $monthDayNum): int
@@ -355,6 +376,7 @@ final class RuleFactory
 
     /**
      * @psalm-return yearday
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseYearDayNum(string $yearDayNum): int
@@ -381,6 +403,7 @@ final class RuleFactory
 
     /**
      * @psalm-return weekno
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseWeekNum(string $weekNum): int
@@ -407,6 +430,7 @@ final class RuleFactory
 
     /**
      * @psalm-return monthno
+     *
      * @throws UnexpectedValueException
      */
     private static function tryParseMonthNum(string $monthNum): int
@@ -444,24 +468,31 @@ final class RuleFactory
     }
 
     /**
-     * @template T
      * @psalm-param T $max
-     * @psalm-type Tr int<1,T>
+     *
      * @psalm-return non-empty-list<Tr>
-     * @psalm-suppress MoreSpecificReturnType,LessSpecificReturnStatement
+     *
      * @throws UnexpectedValueException
+     *
+     * @template T as positive-int
+     * @psalm-type Tr int<1,T>
+     * @psalm-suppress MoreSpecificReturnType,LessSpecificReturnStatement
      */
     private static function tryParseLimitedNumberList(string $ruleName, string $value, int $max): array
     {
         $list = \explode(',', $value);
         $errors = \array_sum(\array_map(
-            static fn (string $number) => !\is_numeric($number) || \intval($number) < 0 || \intval($number) > $max,
+            static fn (string $number) => ! \is_numeric($number) || \intval($number) < 0 || \intval($number) > $max,
             $list,
         ));
         if ($errors > 0) {
-            throw self::error("{$ruleName}={$value}", 'expected comma separated list of numbers between {$min}-{$max} range');
+            throw self::error(
+                sprintf('%s=%s', $ruleName, $value),
+                sprintf('expected comma separated list of numbers between 0-%d range', $max),
+            );
         }
 
+        // phpcs:ignore
         return \array_map(\intval(...), $list);
     }
 
@@ -475,7 +506,10 @@ final class RuleFactory
         int $max,
     ): int {
         if (empty($value) || $value === '+' || $value === '-') {
-            throw self::error("{$ruleName}={$value}", $extendedError);
+            throw self::error(
+                sprintf('%s=%s', $ruleName, $value),
+                $extendedError,
+            );
         }
 
         $negative = match ($value[0]) {
@@ -484,8 +518,11 @@ final class RuleFactory
             default => null,
         };
         $number = \substr($value, $negative !== null ? 1 : 0);
-        if (!\is_numeric($number) || \intval($number) < 1 || \intval($number) > $max) {
-            throw self::error("{$ruleName}={$value}", $extendedError);
+        if (! \is_numeric($number) || \intval($number) < 1 || \intval($number) > $max) {
+            throw self::error(
+                sprintf('%s=%s', $ruleName, $value),
+                $extendedError,
+            );
         }
 
         return $negative ? -\intval($number) : \intval($number);
@@ -493,8 +530,8 @@ final class RuleFactory
 
     public static function error(string $rule, string|null $extended = null): UnexpectedValueException
     {
-        return new UnexpectedValueException(
-            "Parse error near: {$rule}" . ($extended ? " because {$extended}" : '')
-        );
+        $extendedInfo = $extended ? sprintf(' because %s', $extended) : '';
+
+        return new UnexpectedValueException(sprintf('Parse error near: %s', $rule) . $extendedInfo);
     }
 }

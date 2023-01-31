@@ -91,6 +91,7 @@ final class RuleBuilder
 
     /**
      * @param positive-int $count
+     *
      * @return $this
      */
     public function count(int $count): self
@@ -102,6 +103,7 @@ final class RuleBuilder
 
     /**
      * @psalm-param positive-int $interval
+     *
      * @return $this
      */
     public function interval(int $interval): self
@@ -113,6 +115,7 @@ final class RuleBuilder
 
     /**
      * @param second ...$secList
+     *
      * @return $this
      */
     public function bySecond(int ...$secList): self
@@ -125,6 +128,7 @@ final class RuleBuilder
 
     /**
      * @param minute ...$minList
+     *
      * @return $this
      */
     public function byMinute(int ...$minList): self
@@ -137,6 +141,7 @@ final class RuleBuilder
 
     /**
      * @param hour ...$hrList
+     *
      * @return $this
      */
     public function byHour(int ...$hrList): self
@@ -160,6 +165,7 @@ final class RuleBuilder
 
     /**
      * @param monthday ...$mdList
+     *
      * @return $this
      */
     public function byMonthDay(int ...$mdList): self
@@ -172,6 +178,7 @@ final class RuleBuilder
 
     /**
      * @param yearday ...$ydList
+     *
      * @return $this
      */
     public function byYearDay(int ...$ydList): self
@@ -184,6 +191,7 @@ final class RuleBuilder
 
     /**
      * @param weekno ...$wnList
+     *
      * @return $this
      */
     public function byWeekNo(int ...$wnList): self
@@ -196,6 +204,7 @@ final class RuleBuilder
 
     /**
      * @param monthno ...$moList
+     *
      * @return $this
      */
     public function byMonth(int ...$moList): self
@@ -208,6 +217,7 @@ final class RuleBuilder
 
     /**
      * @param yearday ...$spList
+     *
      * @return $this
      */
     public function bySetPos(int ...$spList): self

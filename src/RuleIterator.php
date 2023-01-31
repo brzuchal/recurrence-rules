@@ -16,9 +16,6 @@ use Traversable;
  */
 final class RuleIterator implements IteratorAggregate
 {
-    protected int|null $key = null;
-    protected DateTimeImmutable|null $current = null;
-
     public function __construct(
         public readonly DateTimeImmutable $start,
         public readonly Rule $rule,
@@ -39,7 +36,7 @@ final class RuleIterator implements IteratorAggregate
     }
 
     /**
-     * @psalm-return array<array-key, int|string>
+     * @psalm-return array<string, int|string>
      */
     protected function toParts(): array
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brzuchal\RecurrenceRule;
 
+// phpcs:disable
 enum WeekDay: string
 {
     case Sunday = 'SU';

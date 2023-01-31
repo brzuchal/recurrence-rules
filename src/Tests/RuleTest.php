@@ -24,6 +24,9 @@ class RuleTest extends TestCase
         $this->assertEquals($expected, $test);
     }
 
+    /**
+     * @psalm-return array<array-key, array{0:non-empty-list<non-empty-string>, 1:Rule}>
+     */
     public function dataTestToString(): array
     {
         return [

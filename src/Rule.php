@@ -89,9 +89,12 @@ final class Rule
                 static fn (WeekDayNum $weekDayNum) => $weekDayNum->ordWeek !== null,
                 $this->byDay
             )) &&
-            !($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)
+            ! ($this->freq === Freq::Monthly || $this->freq === Freq::Yearly)
         ) {
-            throw new InvalidArgumentException('The BYDAY rule part MUST NOT be specified with a numeric value when the FREQ rule part is not set to MONTHLY or YEARLY.');
+            throw new InvalidArgumentException(
+                'The BYDAY rule part MUST NOT be specified with a numeric value when the FREQ rule part is ' .
+                'not set to MONTHLY or YEARLY.'
+            );
         }
 
         if (
@@ -104,20 +107,33 @@ final class Rule
             $this->freq === Freq::Yearly
         ) {
             throw new InvalidArgumentException(
-                'The BYDAY rule part with week ordinal MUST NOT be specified with a numeric value with the FREQ rule part set to YEARLY when the BYWEEKNO rule part is specified.',
+                'The BYDAY rule part with week ordinal MUST NOT be specified with a numeric value ' .
+                'with the FREQ rule part set to YEARLY when the BYWEEKNO rule part is specified.',
             );
         }
 
         if ($this->byMonthDay !== null && $this->freq === Freq::Weekly) {
-            throw new InvalidArgumentException('The BYMONTHDAY rule part MUST NOT be specified when the FREQ rule part is set to WEEKLY.');
+            throw new InvalidArgumentException(
+                'The BYMONTHDAY rule part MUST NOT be specified when the FREQ rule part is ' .
+                'set to WEEKLY.',
+            );
         }
 
-        if ($this->byYearDay !== null && ($this->freq === Freq::Daily || $this->freq === Freq::Weekly || $this->freq === Freq::Monthly)) {
-            throw new InvalidArgumentException('The BYYEARDAY rule part MUST NOT be specified when the FREQ rule part is set to DAILY, WEEKLY, or MONTHLY.');
+        if (
+            $this->byYearDay !== null &&
+            ($this->freq === Freq::Daily || $this->freq === Freq::Weekly || $this->freq === Freq::Monthly)
+        ) {
+            throw new InvalidArgumentException(
+                'The BYYEARDAY rule part MUST NOT be specified when the FREQ rule part is set ' .
+                'to DAILY, WEEKLY, or MONTHLY.',
+            );
         }
 
         if ($this->byWeekNo !== null && $this->freq !== Freq::Yearly) {
-            throw new InvalidArgumentException('The BYWEEKNO rule part MUST NOT be used when the FREQ rule part is set to anything other than YEARLY.');
+            throw new InvalidArgumentException(
+                'The BYWEEKNO rule part MUST NOT be used when the FREQ rule part is set to ' .
+                'anything other than YEARLY.',
+            );
         }
 
         if (
@@ -131,7 +147,9 @@ final class Rule
             $this->byMinute === null &&
             $this->bySecond === null
         ) {
-            throw new InvalidArgumentException('The BYSETPOS rule part MUST only be used in conjunction with another BYxxx rule part.');
+            throw new InvalidArgumentException(
+                'The BYSETPOS rule part MUST only be used in conjunction with another BYxxx rule part.',
+            );
         }
     }
 
