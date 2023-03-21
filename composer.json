@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "php": "8.1.*",
+    "php": "^8.1",
     "rlanvin/php-rrule": "^2.3"
   },
   "require-dev": {
