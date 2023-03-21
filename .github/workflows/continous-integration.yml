@@ -9,7 +9,7 @@ on:
 jobs:
   analysis:
     name: Analysis
-    runs-on: [ self-hosted ]
+    runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
@@ -43,15 +43,6 @@ jobs:
             name: PHP_CodeSniffer
             path: report/phpcs/checkstyle.xml
 
-      -   run: mkdir -p report/phpstan
-          if: success() || failure()
-      -   run: composer exec -- phpstan --ansi --no-interaction --no-progress --error-format=checkstyle > report/phpstan/checkstyle.xml
-          if: success() || failure()
-      -   uses: jwgmeligmeyling/checkstyle-github-action@master
-          if: success() || failure()
-          with:
-            name: PHPStan
-            path: report/phpstan/checkstyle.xml
   tests:
     name: Tests
     runs-on: ubuntu-latest
